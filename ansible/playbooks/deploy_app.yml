@@ -1,0 +1,6 @@
+---
+- hosts: all
+
+  tasks:
+    - name: Pull Docker Image
+      shell: docker pull devpondwal/devops-project:latest

@@ -1,0 +1,30 @@
+---
+- hosts: all
+  become: yes
+
+  tasks:
+
+    - name: Install required packages
+      apt:
+        name:
+          - curl
+          - apt-transport-https
+          - conntrack
+        state: present
+        update_cache: yes
+
+    - name: Install kubectl
+      shell: |
+        curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+        chmod +x kubectl
+        mv kubectl /usr/local/bin/
+
+    - name: Install Minikube
+      shell: |
+        curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+        install minikube-linux-amd64 /usr/local/bin/minikube
+
+    - name: Start Minikube
+      shell: |
+        minikube start --driver=docker
+      become_user: ubuntu
